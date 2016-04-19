@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qihuan.core.EasyRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ed_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:padding="@dimen/ed_dialog_title_padding"
+        android:textSize="16sp"
+        tools:text="title" />
+
+    <View
+        android:id="@+id/ed_title_sp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/pers10_black" />
+
+    <ScrollView
+        android:id="@+id/ed_content_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/ed_dialog_content_padding"
+        android:paddingTop="@dimen/ed_dialog_content_padding">
+
+        <TextView
+            android:id="@+id/ed_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:paddingLeft="@dimen/ed_dialog_content_padding"
+            android:paddingRight="@dimen/ed_dialog_content_padding"
+            tools:text="content" />
+
+    </ScrollView>
+
+
+    <View
+        android:id="@+id/ed_content_sp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/pers10_black" />
+
+    <LinearLayout
+        android:id="@+id/ed_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <com.qihuan.core.EasyButton
+            android:id="@+id/ed_btn_neutral"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="neutralButton" />
+
+
+        <View
+            android:id="@+id/ed_btn_sp_neutral"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/pers10_black" />
+
+
+        <com.qihuan.core.EasyButton
+            android:id="@+id/ed_btn_negative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="negativeButton" />
+
+
+        <View
+            android:id="@+id/ed_btn_sp_negative"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/pers10_black" />
+
+
+        <com.qihuan.core.EasyButton
+            android:id="@+id/ed_btn_positive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="positiveButton" />
+
+    </LinearLayout>
+</com.qihuan.core.EasyRootLayout>

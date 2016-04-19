@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="pers5_black">#09000000</color>
+    <color name="pers10_black">#19000000</color>
+    <color name="pers20_black">#33000000</color>
+    <color name="pers30_black">#4c000000</color>
+
+    <color name="font_normal">#4d4d4d</color>
+    <color name="font_black">#000000</color>
+    <color name="font_danger">#dd3b44</color>
+    <color name="font_white">#ffffff</color>
+    <color name="font_blue">#147ed4</color>
+    <color name="font_light">#adafb9</color>
+</resources>

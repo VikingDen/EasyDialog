@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ED_Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@drawable/dialog_bg_light</item>
+    </style>
+
+    <!--unsupport yet-->
+    <style name="ED_Drak" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@drawable/dialog_bg_dark</item>
+    </style>
+
+</resources>

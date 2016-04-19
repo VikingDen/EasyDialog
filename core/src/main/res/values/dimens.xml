@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ed_dialog_title_padding">10dp</dimen>
+    <dimen name="ed_dialog_content_padding">10dp</dimen>
+    <dimen name="ed_dialog_corner">8dp</dimen>
+</resources>
