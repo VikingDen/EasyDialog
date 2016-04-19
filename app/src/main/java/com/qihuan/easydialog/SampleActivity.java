@@ -52,7 +52,8 @@ public class SampleActivity extends AppCompatActivity {
                 "超长文本",//12
                 "列表",//13
                 "自定义列表adapter",//14
-                "列表样式调整"//15
+                "列表样式调整",//15
+                "自定义view"//16
         );
         mlistView.setAdapter(new EDSimpleAdapter<String>(items, R.layout.item_sample) {
             @Override
@@ -173,9 +174,9 @@ public class SampleActivity extends AppCompatActivity {
                     case 13:
                         builder.title("设计带给你好心情")
                                 .items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
-                                .itemsCallback(new EasyDialog.ListCallback() {
+                                .itemsCallback(new EasyDialog.ListCallback<CharSequence>() {
                                     @Override
-                                    public void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull Object item) {
+                                    public void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull CharSequence item) {
                                         showToast((String) item);
                                     }
                                 })
@@ -202,12 +203,16 @@ public class SampleActivity extends AppCompatActivity {
                         break;
 
                     case 15:
-                        builder
-                                .items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
+                        builder.items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
                                 .itemsColorRes(R.color.font_danger)
-                                .itemsGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL)
+                                .itemsGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL)
                                 .itemsHeight(EasyUtil.dp2px(80))
                                 .itemsTextSize(20F);
+                        break;
+                    case 16:
+                        builder.title("自定义view")
+                                .customView(R.layout.custom_view, true)
+                                .positiveText("确认");
                         break;
                 }
 

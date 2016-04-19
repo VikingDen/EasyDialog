@@ -43,6 +43,10 @@ public class EasyRootLayout extends LinearLayout {
         mScrollView = (ScrollView) findViewById(R.id.ed_content_scroll);
     }
 
+    public void setCustomScrollView(ScrollView scrollView) {
+        mScrollView = scrollView;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

@@ -1,8 +1,12 @@
 package com.qihuan.core;
 
+import android.content.res.Resources;
 import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.qihuan.adapter.EDSimpleAdapter;
@@ -30,6 +34,9 @@ public class DialogInit {
 
         //list
         dialog.listView = findView(dialog, R.id.ed_list);
+
+        //custom
+        dialog.customViewFrame = findView(dialog, R.id.ed_custom_frame);
 
         //set up title
         if (!TextUtils.isEmpty(builder.title)) {
@@ -78,6 +85,41 @@ public class DialogInit {
             dialog.setupListcallback();
         }
 
+        //set up customView
+        if (null != dialog.customViewFrame && null != builder.customView) {
+            View innerView = builder.customView;
+            if (innerView.getParent() != null) {
+                ((ViewGroup) innerView.getParent()).removeView(innerView);
+            }
+            if (builder.wrapCustomViewInScroll) {
+                /* Apply the frame padding to the content, this allows the ScrollView to draw it's
+                   over scroll glow without clipping */
+                final Resources r = dialog.getContext().getResources();
+                final int framePadding = r.getDimensionPixelSize(R.dimen.ed_dialog_content_padding);
+                final ScrollView sv = new ScrollView(dialog.getContext());
+                sv.setClipToPadding(false);
+                if (innerView instanceof EditText) {
+                    // Setting padding to an EditText causes visual errors, set it to the parent instead
+                    sv.setPadding(framePadding, framePadding, framePadding, framePadding);
+                } else {
+                    // Setting padding to scroll view pushes the scroll bars out, don't do it if not necessary (like above)
+                    sv.setPadding(0, framePadding, 0, framePadding);
+                    innerView.setPadding(framePadding, 0, framePadding, 0);
+                }
+                sv.addView(innerView, new ScrollView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                //TODO 这里如果启用了ScrollView，默认高度为320dp
+                dialog.customViewFrame.addView(sv, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        EasyUtil.dp2px(320)));
+            } else {
+                dialog.customViewFrame.addView(innerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+
+        }
+
         //set up button
         dialog.positiveButton.setVisibility(!TextUtils.isEmpty(builder.positiveText) ? View.VISIBLE : View.GONE);
         dialog.positiveButton.setText(builder.positiveText);
@@ -123,6 +165,7 @@ public class DialogInit {
     public static int getInflateLayout(EasyDialog.Builder builder) {
         if (builder.customView != null) {
             //自定义的coustomView
+            return R.layout.easy_dialog_custom;
         } else if (builder.items != null && builder.items.size() > 0 || builder.adapter != null) {
             //列表View
             return R.layout.easy_dialog_list;

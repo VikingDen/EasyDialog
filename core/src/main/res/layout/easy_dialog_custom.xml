@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qihuan.core.EasyRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/ed_stub_head" />
+
+    <FrameLayout
+        android:id="@+id/ed_custom_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/ed_stub_bottom" />
+</com.qihuan.core.EasyRootLayout>

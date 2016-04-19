@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -14,6 +15,7 @@ import android.support.annotation.UiThread;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -163,6 +165,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected float contentLineSpacingMultiplier = 1.2f;
         protected int contentGravity = Gravity.CENTER;
         protected View customView;
+        protected boolean wrapCustomViewInScroll;
         //list相关
         protected List<CharSequence> items;
         protected ListCallback listCallback;
@@ -343,6 +346,26 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         public Builder<T> adapter(@NonNull EDSimpleAdapter<T> adapter, @Nullable ListCallback<T> callback) {
             this.adapter = adapter;
             this.listCallbackCustom = callback;
+            return this;
+        }
+
+        public Builder customView(@LayoutRes int layoutRes, boolean wrapInScrollView) {
+            return customView(LayoutInflater.from(this.context).inflate(layoutRes, null), wrapInScrollView);
+        }
+
+        public Builder customView(@NonNull View view, boolean wrapInScrollView) {
+            if (this.content != null)
+                throw new IllegalStateException("You cannot use customView() when you have content set.");
+            else if (this.items != null)
+                throw new IllegalStateException("You cannot use customView() when you have items set.");
+//            else if (this.inputCallback != null)
+//                throw new IllegalStateException("You cannot use customView() with an input dialog");
+//            else if (this.progress > -2 || this.indeterminateProgress)
+//                throw new IllegalStateException("You cannot use customView() with a progress dialog");
+            if (view.getParent() != null && view.getParent() instanceof ViewGroup)
+                ((ViewGroup) view.getParent()).removeView(view);
+            this.customView = view;
+            this.wrapCustomViewInScroll = wrapInScrollView;
             return this;
         }
 
