@@ -119,7 +119,7 @@ public class SampleActivity extends AppCompatActivity {
                     case 6:
                         builder.content("希望能用设计给人带来好的心情。\n谢谢大家观赏。")
                                 .positiveText("确认")
-                                .positiveColor(Color.GREEN)
+                                .positiveColorRes(R.color.font_danger)
                                 .negativeText("取消");
                         break;
 
@@ -141,7 +141,7 @@ public class SampleActivity extends AppCompatActivity {
                         break;
 
                     case 9:
-                        builder.title(Html.fromHtml("设计带给你<font color='red'><i>好心情</i></font>"))
+                        builder.title(Html.fromHtml("设计带给你<font color='#147ed4'><i>好心情</i></font>"))
                                 .content("希望能用设计给人带来好的心情。\n谢谢大家观赏。")
                                 .positiveText("确认")
                                 .negativeText("取消");
@@ -149,7 +149,7 @@ public class SampleActivity extends AppCompatActivity {
 
                     case 10:
                         builder.title("设计带给你好心情")
-                                .content(Html.fromHtml("希望能用设计给人带来好的心情。<br/><font color='red'><i>谢谢大家观赏。</i></font>"))
+                                .content(Html.fromHtml("希望能用设计给人带来好的心情。<br/><font color='#147ed4'><i>谢谢大家观赏。</i></font>"))
                                 .positiveText("确认")
                                 .negativeText("取消");
                         break;
@@ -173,7 +173,7 @@ public class SampleActivity extends AppCompatActivity {
 
                     case 13:
                         builder.title("设计带给你好心情")
-                                .items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
+                                .items("哈哈", "嘿嘿", Html.fromHtml("<font color='#147ed4'>呵呵</font>"))
                                 .itemsCallback(new EasyDialog.ListCallback<CharSequence>() {
                                     @Override
                                     public void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull CharSequence item) {
@@ -185,7 +185,7 @@ public class SampleActivity extends AppCompatActivity {
                         break;
 
                     case 14:
-                        List<CharSequence> items = Arrays.asList("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"));
+                        List<CharSequence> items = Arrays.asList("哈哈", "嘿嘿", Html.fromHtml("<font color='#147ed4'>呵呵</font>"));
                         builder.title("设计带给你好心情")
                                 .adapter(new EDSimpleAdapter<CharSequence>(items, R.layout.ed_list_item) {
                                     @Override
@@ -203,7 +203,7 @@ public class SampleActivity extends AppCompatActivity {
                         break;
 
                     case 15:
-                        builder.items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
+                        builder.items("哈哈", "嘿嘿", Html.fromHtml("<font color='#147ed4'>呵呵</font>"))
                                 .itemsColorRes(R.color.font_danger)
                                 .itemsGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL)
                                 .itemsHeight(EasyUtil.dp2px(80))
