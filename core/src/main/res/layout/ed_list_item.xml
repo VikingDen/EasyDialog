@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ed_item_text"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:gravity="center"
+    android:padding="@dimen/ed_dialog_content_padding"
+    tools:text="条目信息" />

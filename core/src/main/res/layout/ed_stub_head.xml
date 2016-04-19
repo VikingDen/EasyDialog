@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/easy_dialog_basic">
+
+    <TextView
+        android:id="@+id/ed_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:padding="@dimen/ed_dialog_title_padding"
+        android:textSize="16sp"
+        tools:text="title" />
+
+    <View
+        android:id="@+id/ed_title_sp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/pers10_black" />
+</merge>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -12,10 +14,15 @@ import android.support.annotation.UiThread;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.qihuan.adapter.EDSimpleAdapter;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by qihuan on 16/4/18.
@@ -98,6 +105,29 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         return mBuilder.customView;
     }
 
+    public void setupListcallback() {
+        if (listView == null) {
+            return;
+        } else if ((mBuilder.items == null || mBuilder.items.size() == 0) && mBuilder.adapter == null) {
+            return;
+        }
+
+        listView.setAdapter(getBuilder().adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (getBuilder().listCallbackCustom != null) {
+                    getBuilder().listCallbackCustom.onItemClick(EasyDialog.this, view, position, getBuilder().adapter.getItem(position));
+                    return;
+                }
+                //这里区分两种listCallbck，是为了给单选和多项做准备
+                if (getBuilder().listCallback != null) {
+                    getBuilder().listCallback.onItemClick(EasyDialog.this, view, position, getBuilder().adapter.getItem(position));
+                }
+            }
+        });
+    }
+
 
     /**
      * An alternate way to define a single callback.
@@ -111,32 +141,41 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
     /**
      * list 按钮
      */
-    public interface ListCallback {
-        void onItemClick(@NonNull EasyDialog dialog, @NonNull int position);
+    public interface ListCallback<T> {
+        void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull T item);
     }
 
 
     /**
      * 构建类
+     * T 仅用于adapter方式
      */
-    public static class Builder {
+    public static class Builder<T> {
 
         protected final Context context;
         //标题相关
         protected CharSequence title;
-        protected int titleColor = -1;
+        protected int titleColor;
         protected int titleGravity = Gravity.CENTER;
         //内容相关
         protected CharSequence content;
-        protected int contentColor = -1;
+        protected int contentColor;
         protected float contentLineSpacingMultiplier = 1.2f;
         protected int contentGravity = Gravity.CENTER;
         protected View customView;
         //list相关
-        protected CharSequence[] items;
-        protected ListCallback onListCallback;
-        protected int dividerColor = -1;
-        protected int itemColor = -1;
+        protected List<CharSequence> items;
+        protected ListCallback listCallback;
+        protected int dividerColorRes;
+        protected int dividerHeight = 1;
+        protected int itemColor;
+        protected int itemsGravity = Gravity.CENTER;
+        protected int itemsBackgroundRes;
+        protected ListCallback<T> listCallbackCustom;
+        protected float itemsTextSize = 16F;
+        protected int itemsHeight = EasyUtil.dp2px(46);
+        //自定义adapter方式
+        protected EDSimpleAdapter<T> adapter;
         //按钮相关
         protected CharSequence positiveText;
         protected CharSequence neutralText;
@@ -148,7 +187,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected SingleButtonCallback onNegativeCallback;
         protected SingleButtonCallback onNeutralCallback;
         protected SingleButtonCallback onAnyCallback;
-
         //dialog 相关
         protected boolean autoDismiss = true;
         protected OnDismissListener dismissListener;
@@ -156,17 +194,8 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected OnKeyListener keyListener;
         protected OnShowListener showListener;
         //color 配置相关
-        protected boolean titleColorSet = false;
-        protected boolean contentColorSet = false;
-        protected boolean itemColorSet = false;
-        protected boolean positiveColorSet = false;
-        protected boolean neutralColorSet = false;
-        protected boolean negativeColorSet = false;
-        protected boolean dividerColorSet = false;
         protected boolean cancelable = true;
         protected boolean canceledOnTouchOutside = true;
-        //TODO
-        protected BaseAdapter adapter;
 
 
         public Builder(Context context) {
@@ -183,7 +212,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             contentColor = fontNormal;
             titleColor = fontBlack;
             itemColor = fontNormal;
-            dividerColor = EasyUtil.getColor(context, R.color.pers20_black);
+
+            dividerColorRes = R.color.pers10_black;
+            itemsBackgroundRes = R.drawable.press_rect_selector;
         }
 
         /*     标题相关    */
@@ -204,7 +235,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder titleColor(@ColorInt int color) {
             this.titleColor = color;
-            this.titleColorSet = true;
             return this;
         }
 
@@ -233,7 +263,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder contentColor(@ColorInt int color) {
             this.contentColor = color;
-            this.contentColorSet = true;
             return this;
         }
 
@@ -251,6 +280,72 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             this.contentLineSpacingMultiplier = multiplier;
             return this;
         }
+
+        public Builder items(@NonNull List<CharSequence> data) {
+            if (this.customView != null)
+                throw new IllegalStateException("You cannot set items() when you're using a custom view.");
+            if (null != data && data.size() > 0) {
+                this.items = data;
+            }
+            return this;
+        }
+
+        public Builder items(@NonNull CharSequence... items) {
+            items(Arrays.asList(items));
+            return this;
+        }
+
+        public Builder itemsCallback(@NonNull ListCallback callback) {
+            this.listCallback = callback;
+            return this;
+        }
+
+        public Builder itemsColor(@ColorInt int color) {
+            this.itemColor = color;
+            return this;
+        }
+
+        public Builder itemsColorRes(@ColorRes int colorRes) {
+            return itemsColor(EasyUtil.getColor(this.context, colorRes));
+        }
+
+
+        public Builder itemsGravity(@NonNull int gravity) {
+            this.itemsGravity = gravity;
+            return this;
+        }
+
+        public Builder itemsBackground(@DrawableRes int itemsBackgroundRes) {
+            this.itemsBackgroundRes = itemsBackgroundRes;
+            return this;
+        }
+
+        public Builder itemsTextSize(@DrawableRes float itemsTextSize) {
+            this.itemsTextSize = itemsTextSize;
+            return this;
+        }
+
+        public Builder itemsHeight(@DrawableRes int itemsHeight) {
+            this.itemsHeight = itemsHeight;
+            return this;
+        }
+
+        public Builder dividerColor(@ColorRes int colorRes) {
+            this.dividerColorRes = colorRes;
+            return this;
+        }
+
+        public Builder dividerHeight(@IntRange(from = 0) int dividerHeight) {
+            this.dividerHeight = dividerHeight;
+            return this;
+        }
+
+        public Builder<T> adapter(@NonNull EDSimpleAdapter<T> adapter, @Nullable ListCallback<T> callback) {
+            this.adapter = adapter;
+            this.listCallbackCustom = callback;
+            return this;
+        }
+
 
         /* 按钮相关 */
         public Builder positiveText(@StringRes int postiveRes) {
@@ -274,7 +369,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder positiveColor(@NonNull ColorStateList colorStateList) {
             this.positiveColor = colorStateList;
-            this.positiveColorSet = true;
             return this;
         }
 
@@ -298,7 +392,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder negativeColor(@NonNull ColorStateList colorStateList) {
             this.negativeColor = colorStateList;
-            this.negativeColorSet = true;
             return this;
         }
 
@@ -322,7 +415,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder neutralColor(@NonNull ColorStateList colorStateList) {
             this.neutralColor = colorStateList;
-            this.neutralColorSet = true;
             return this;
         }
 
@@ -401,6 +493,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             dialog.show();
             return dialog;
         }
+
 
     }
 

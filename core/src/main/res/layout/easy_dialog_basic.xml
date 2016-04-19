@@ -5,20 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ed_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:padding="@dimen/ed_dialog_title_padding"
-        android:textSize="16sp"
-        tools:text="title" />
-
-    <View
-        android:id="@+id/ed_title_sp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/pers10_black" />
+    <include layout="@layout/ed_stub_head" />
 
     <ScrollView
         android:id="@+id/ed_content_scroll"
@@ -39,58 +26,5 @@
 
     </ScrollView>
 
-
-    <View
-        android:id="@+id/ed_content_sp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/pers10_black" />
-
-    <LinearLayout
-        android:id="@+id/ed_btn_layout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <com.qihuan.core.EasyButton
-            android:id="@+id/ed_btn_neutral"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="neutralButton" />
-
-
-        <View
-            android:id="@+id/ed_btn_sp_neutral"
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/pers10_black" />
-
-
-        <com.qihuan.core.EasyButton
-            android:id="@+id/ed_btn_negative"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="negativeButton" />
-
-
-        <View
-            android:id="@+id/ed_btn_sp_negative"
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/pers10_black" />
-
-
-        <com.qihuan.core.EasyButton
-            android:id="@+id/ed_btn_positive"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:text="positiveButton" />
-
-    </LinearLayout>
+    <include layout="@layout/ed_stub_bottom" />
 </com.qihuan.core.EasyRootLayout>

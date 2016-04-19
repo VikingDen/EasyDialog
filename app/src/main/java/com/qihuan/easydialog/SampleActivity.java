@@ -15,6 +15,7 @@ import com.qihuan.adapter.EDSimpleAdapter;
 import com.qihuan.adapter.ViewHolder;
 import com.qihuan.core.EasyButton;
 import com.qihuan.core.EasyDialog;
+import com.qihuan.core.EasyUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,10 @@ public class SampleActivity extends AppCompatActivity {
                 "title富文本",//9
                 "content富文本",//10
                 "不自动消失",//11
-                "超长文本"//12
+                "超长文本",//12
+                "列表",//13
+                "自定义列表adapter",//14
+                "列表样式调整"//15
         );
         mlistView.setAdapter(new EDSimpleAdapter<String>(items, R.layout.item_sample) {
             @Override
@@ -163,6 +167,47 @@ public class SampleActivity extends AppCompatActivity {
                                 .contentGravity(Gravity.LEFT)
                                 .positiveText("确认")
                                 .negativeText("取消");
+                        break;
+
+
+                    case 13:
+                        builder.title("设计带给你好心情")
+                                .items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
+                                .itemsCallback(new EasyDialog.ListCallback() {
+                                    @Override
+                                    public void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull Object item) {
+                                        showToast((String) item);
+                                    }
+                                })
+                                .positiveText("确认")
+                                .negativeText("取消");
+                        break;
+
+                    case 14:
+                        List<CharSequence> items = Arrays.asList("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"));
+                        builder.title("设计带给你好心情")
+                                .adapter(new EDSimpleAdapter<CharSequence>(items, R.layout.ed_list_item) {
+                                    @Override
+                                    protected void bindView(View convertView, int position, ViewHolder viewHolder) {
+                                        viewHolder.getTextView(R.id.ed_item_text).setText(getItem(position));
+                                    }
+                                }, new EasyDialog.ListCallback<CharSequence>() {
+                                    @Override
+                                    public void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull CharSequence item) {
+                                        showToast(item.toString());
+                                    }
+                                })
+                                .positiveText("确认")
+                                .negativeText("取消");
+                        break;
+
+                    case 15:
+                        builder
+                                .items("哈哈", "嘿嘿", Html.fromHtml("<font color='red'>呵呵</font>"))
+                                .itemsColorRes(R.color.font_danger)
+                                .itemsGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL)
+                                .itemsHeight(EasyUtil.dp2px(80))
+                                .itemsTextSize(20F);
                         break;
                 }
 

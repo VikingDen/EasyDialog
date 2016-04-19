@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 
@@ -67,5 +68,14 @@ public class EasyUtil {
 
     public static int dp2px(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static Drawable getDrawable(Context context, int color) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            //noinspection deprecation
+            return context.getResources().getDrawable(color);
+        } else {
+            return context.getDrawable(color);
+        }
     }
 }
