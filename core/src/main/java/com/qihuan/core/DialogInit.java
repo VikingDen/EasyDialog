@@ -146,9 +146,13 @@ public class DialogInit {
         dialog.negativeButton.setTextSize(builder.buttonTextSize);
         dialog.negativeButton.setOnClickListener(dialog);
 
+        View bottomSp = findView(dialog, R.id.ed_bottom_sp);
         if (TextUtils.isEmpty(builder.positiveText) && TextUtils.isEmpty(builder.negativeText) && TextUtils.isEmpty(builder.neutralText)) {
             findView(dialog, R.id.ed_btn_layout).setVisibility(View.GONE);
-            findView(dialog, R.id.ed_content_sp).setVisibility(View.GONE);
+            bottomSp.setVisibility(View.GONE);
+        }else {
+            bottomSp.setBackgroundColor(builder.bottomSpColor);
+            bottomSp.getLayoutParams().height = builder.bottomSpHeight;
         }
 
         //set up dialog

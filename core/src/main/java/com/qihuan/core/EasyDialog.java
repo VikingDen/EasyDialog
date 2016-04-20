@@ -199,6 +199,8 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected SingleButtonCallback onNegativeCallback;
         protected SingleButtonCallback onNeutralCallback;
         protected SingleButtonCallback onAnyCallback;
+        protected int bottomSpColor;
+        protected int bottomSpHeight = 1;//默认是一像素
         //dialog 相关
         protected boolean autoDismiss = true;
         protected OnDismissListener dismissListener;
@@ -227,6 +229,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
             dividerColorRes = R.color.pers10_black;
             itemsBackgroundRes = R.drawable.press_rect_selector;
+            bottomSpColor = EasyUtil.getColor(context, R.color.pers10_black);
 
             //normal mode (字体大小 标题、按钮 17sp 内容16sp , 标题、按钮高度50dp)
             //small mode (梯子大小 标题、按钮 16sp 内容 14sp, 标题，按钮高度40dp，标题不加粗)
@@ -499,6 +502,16 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder onAny(@NonNull SingleButtonCallback callback) {
             this.onAnyCallback = callback;
+            return this;
+        }
+
+        public Builder bottomSpColor(@ColorInt int bottomSpColor) {
+            this.bottomSpColor = bottomSpColor;
+            return this;
+        }
+
+        public Builder bottomSpHeight(int bottomSpHeight) {
+            this.bottomSpHeight = bottomSpHeight;
             return this;
         }
 

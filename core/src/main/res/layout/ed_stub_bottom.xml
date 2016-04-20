@@ -5,7 +5,7 @@
 
 
     <View
-        android:id="@+id/ed_content_sp"
+        android:id="@+id/ed_bottom_sp"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/pers10_black" />
