@@ -16,6 +16,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
+        <!--字体大小在Builder 中有默认值，默认值为17sp-->
         <com.qihuan.core.EasyButton
             android:id="@+id/ed_btn_neutral"
             android:layout_width="0dp"

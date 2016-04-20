@@ -47,7 +47,6 @@ public class EasyButton extends TextView {
      */
     private void init() {
         setBackgroundResource(R.drawable.press_rect_selector);
-        setTextSize(17);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.qihuan.core;
 
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.support.annotation.IdRes;
 import android.text.TextUtils;
 import android.view.View;
@@ -43,6 +44,8 @@ public class DialogInit {
             dialog.title.setText(builder.title);
             dialog.title.setTextColor(builder.titleColor);
             dialog.title.setGravity(builder.titleGravity);
+            dialog.title.setTextSize(builder.titleTextSize);
+            dialog.title.setTypeface(null, Typeface.BOLD);
         } else {
             dialog.title.setVisibility(View.GONE);
             findView(dialog, R.id.ed_title_sp).setVisibility(View.GONE);
@@ -55,6 +58,7 @@ public class DialogInit {
                 dialog.content.setTextColor(builder.contentColor);
                 dialog.content.setLineSpacing(0F, builder.contentLineSpacingMultiplier);
                 dialog.content.setGravity(builder.contentGravity);
+                dialog.content.setTextSize(builder.contentTextSize);
             } else {
                 dialog.content.setVisibility(View.GONE);
             }
@@ -125,18 +129,21 @@ public class DialogInit {
         dialog.positiveButton.setText(builder.positiveText);
         dialog.positiveButton.setTextColor(builder.positiveColor);
         dialog.positiveButton.setEasyButtonType(EasyButton.EasyButtonType.PositiveBtn);
+        dialog.positiveButton.setTextSize(builder.buttonTextSize);
         dialog.positiveButton.setOnClickListener(dialog);
         dialog.neutralButton.setVisibility(!TextUtils.isEmpty(builder.neutralText) ? View.VISIBLE : View.GONE);
         neutralSp.setVisibility(!TextUtils.isEmpty(builder.neutralText) ? View.VISIBLE : View.GONE);
         dialog.neutralButton.setText(builder.neutralText);
         dialog.neutralButton.setTextColor(builder.neutralColor);
         dialog.neutralButton.setEasyButtonType(EasyButton.EasyButtonType.NeutralBtn);
+        dialog.neutralButton.setTextSize(builder.buttonTextSize);
         dialog.neutralButton.setOnClickListener(dialog);
         dialog.negativeButton.setVisibility(!TextUtils.isEmpty(builder.negativeText) ? View.VISIBLE : View.GONE);
         negativeSp.setVisibility(!TextUtils.isEmpty(builder.negativeText) ? View.VISIBLE : View.GONE);
         dialog.negativeButton.setText(builder.negativeText);
         dialog.negativeButton.setTextColor(builder.negativeColor);
         dialog.negativeButton.setEasyButtonType(EasyButton.EasyButtonType.NegativeBtn);
+        dialog.negativeButton.setTextSize(builder.buttonTextSize);
         dialog.negativeButton.setOnClickListener(dialog);
 
         if (TextUtils.isEmpty(builder.positiveText) && TextUtils.isEmpty(builder.negativeText) && TextUtils.isEmpty(builder.neutralText)) {

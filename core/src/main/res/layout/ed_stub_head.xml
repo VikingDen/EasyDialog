@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/easy_dialog_basic">
-
+    <!--字体大小在builder中有默认值，默认值为17sp-->
     <TextView
         android:id="@+id/ed_title"
         android:layout_width="match_parent"
@@ -10,6 +10,7 @@
         android:gravity="center"
         android:padding="@dimen/ed_dialog_title_padding"
         android:textSize="17sp"
+        android:textStyle="bold"
         tools:text="title" />
 
     <View

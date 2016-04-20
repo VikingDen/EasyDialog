@@ -3,6 +3,7 @@ package com.qihuan.core;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -119,7 +120,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (getBuilder().autoDismiss){
+                if (getBuilder().autoDismiss) {
                     dismiss();
                 }
                 if (getBuilder().listCallbackCustom != null) {
@@ -163,6 +164,8 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected CharSequence title;
         protected int titleColor;
         protected int titleGravity = Gravity.CENTER;
+        protected float titleTextSize = 17F;
+        protected int titleTypeFace = Typeface.BOLD;
         //内容相关
         protected CharSequence content;
         protected int contentColor;
@@ -170,6 +173,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected int contentGravity = Gravity.CENTER;
         protected View customView;
         protected boolean wrapCustomViewInScroll;
+        protected float contentTextSize = 16F;
         //list相关
         protected List<CharSequence> items;
         protected ListCallback listCallback;
@@ -187,6 +191,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected CharSequence positiveText;
         protected CharSequence neutralText;
         protected CharSequence negativeText;
+        protected float buttonTextSize = 17F;
         protected ColorStateList positiveColor;
         protected ColorStateList negativeColor;
         protected ColorStateList neutralColor;
@@ -222,6 +227,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
             dividerColorRes = R.color.pers10_black;
             itemsBackgroundRes = R.drawable.press_rect_selector;
+
+            //normal mode (字体大小 标题、按钮 17sp 内容16sp , 标题、按钮高度50dp)
+            //small mode (梯子大小 标题、按钮 16sp 内容 14sp, 标题，按钮高度40dp，标题不加粗)
         }
 
         /*     标题相关    */
@@ -247,6 +255,17 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder titleColorRes(@ColorRes int colorRes) {
             return titleColor(EasyUtil.getColor(this.context, colorRes));
+        }
+
+
+        public Builder titleTextSize(float titleTextSize) {
+            this.titleTextSize = titleTextSize;
+            return this;
+        }
+
+        public Builder titleTypeFace(int titleTypeFace) {
+            this.titleTypeFace = titleTypeFace;
+            return this;
         }
 
         /*       * 内容相关        * */
@@ -285,6 +304,12 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
         public Builder contentLineSpacing(float multiplier) {
             this.contentLineSpacingMultiplier = multiplier;
+            return this;
+        }
+
+
+        public Builder contentTextSize(float contentTextSize) {
+            this.contentTextSize = contentTextSize;
             return this;
         }
 
@@ -327,7 +352,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             return this;
         }
 
-        public Builder itemsTextSize(@DrawableRes float itemsTextSize) {
+        public Builder itemsTextSize(float itemsTextSize) {
             this.itemsTextSize = itemsTextSize;
             return this;
         }
@@ -360,7 +385,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         }
 
 
-
         public Builder customView(@LayoutRes int layoutRes, boolean wrapInScrollView) {
             return customView(LayoutInflater.from(this.context).inflate(layoutRes, null), wrapInScrollView);
         }
@@ -383,6 +407,11 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
 
         /* 按钮相关 */
+        public Builder buttonTextSize(float buttonTextSize) {
+            this.buttonTextSize = buttonTextSize;
+            return this;
+        }
+
         public Builder positiveText(@StringRes int postiveRes) {
             if (postiveRes == 0) return this;
             positiveText(this.context.getText(postiveRes));

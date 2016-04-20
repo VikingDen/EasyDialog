@@ -6,10 +6,11 @@
     <color name="pers20_black">#33000000</color>
     <color name="pers30_black">#4c000000</color>
 
-    <color name="font_normal">#4d4d4d</color>
+    <color name="font_normal">#626574</color>
+    <color name="font_darker">#2b2d3a</color>
+    <color name="font_lighter">#adafb9</color>
     <color name="font_black">#000000</color>
     <color name="font_danger">#dd3b44</color>
     <color name="font_white">#ffffff</color>
     <color name="font_blue">#147ed4</color>
-    <color name="font_light">#adafb9</color>
 </resources>

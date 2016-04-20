@@ -6,4 +6,5 @@
     android:layout_height="46dp"
     android:gravity="center"
     android:padding="@dimen/ed_dialog_content_padding"
-    tools:text="条目信息" />
+    android:textSize="16sp"
+    tools:text="条目信息" /><!--字体大小在builder中有默认值，默认值为16sp-->
