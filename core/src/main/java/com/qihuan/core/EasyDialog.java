@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -118,6 +119,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (getBuilder().autoDismiss){
+                    dismiss();
+                }
                 if (getBuilder().listCallbackCustom != null) {
                     getBuilder().listCallbackCustom.onItemClick(EasyDialog.this, view, position, getBuilder().adapter.getItem(position));
                     return;
@@ -178,7 +182,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected float itemsTextSize = 16F;
         protected int itemsHeight = EasyUtil.dp2px(46);
         //自定义adapter方式
-        protected EDSimpleAdapter<T> adapter;
+        protected ListAdapter adapter;
         //按钮相关
         protected CharSequence positiveText;
         protected CharSequence neutralText;
@@ -343,11 +347,19 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             return this;
         }
 
-        public Builder<T> adapter(@NonNull EDSimpleAdapter<T> adapter, @Nullable ListCallback<T> callback) {
+        public Builder<T> adapterSimple(@NonNull EDSimpleAdapter<T> adapter, @Nullable ListCallback<T> callback) {
             this.adapter = adapter;
             this.listCallbackCustom = callback;
             return this;
         }
+
+        public Builder<T> adapter(@NonNull ListAdapter adapter, @Nullable ListCallback<T> callback) {
+            this.adapter = adapter;
+            this.listCallbackCustom = callback;
+            return this;
+        }
+
+
 
         public Builder customView(@LayoutRes int layoutRes, boolean wrapInScrollView) {
             return customView(LayoutInflater.from(this.context).inflate(layoutRes, null), wrapInScrollView);

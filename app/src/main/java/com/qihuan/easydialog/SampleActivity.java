@@ -1,6 +1,5 @@
 package com.qihuan.easydialog;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -187,7 +186,7 @@ public class SampleActivity extends AppCompatActivity {
                     case 14:
                         List<CharSequence> items = Arrays.asList("哈哈", "嘿嘿", Html.fromHtml("<font color='#147ed4'>呵呵</font>"));
                         builder.title("设计带给你好心情")
-                                .adapter(new EDSimpleAdapter<CharSequence>(items, R.layout.ed_list_item) {
+                                .adapterSimple(new EDSimpleAdapter<CharSequence>(items, R.layout.ed_list_item) {
                                     @Override
                                     protected void bindView(View convertView, int position, ViewHolder viewHolder) {
                                         viewHolder.getTextView(R.id.ed_item_text).setText(getItem(position));
