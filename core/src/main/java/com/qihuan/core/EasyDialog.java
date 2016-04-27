@@ -239,8 +239,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected int progressMax = 0;
         protected String progressNumberFormat;
         protected NumberFormat progressPercentFormat;
-        /*横向的模糊进度（默认是圆环的模糊进度）*/
-        protected boolean indeterminateIsHorizontalProgress;
+        protected int progressColor;
         //按钮相关
         protected CharSequence positiveText;
         protected CharSequence neutralText;
@@ -280,6 +279,7 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             contentColor = fontNormal;
             titleColor = fontBlack;
             itemColor = fontNormal;
+            progressColor = fontBlue;
 
             dividerColorRes = R.color.pers10_black;
             itemsBackgroundRes = R.drawable.press_rect_selector;
@@ -517,13 +517,13 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             return this;
         }
 
-        /**
-         * By default, indeterminate progress dialogs will use a circular indicator. You
-         * can change it to use a horizontal progress indicator.
-         */
-        public Builder progressIndeterminateStyle(boolean horizontal) {
-            this.indeterminateIsHorizontalProgress = horizontal;
+        public Builder progressColor(@ColorInt int color) {
+            this.progressColor = color;
             return this;
+        }
+
+        public Builder progressColorRes(@ColorRes int colorRes) {
+            return progressColor(EasyUtil.getColor(this.context, colorRes));
         }
 
         /* 按钮相关 */

@@ -139,31 +139,10 @@ public class DialogInit {
                 return;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                if (builder.indeterminateProgress) {
-//                    if (builder.indeterminateIsHorizontalProgress) {
-//                        IndeterminateHorizontalProgressDrawable d = new IndeterminateHorizontalProgressDrawable(builder.getContext());
-//                        d.setTint(builder.widgetColor);
-//                        dialog.mProgress.setProgressDrawable(d);
-//                        dialog.mProgress.setIndeterminateDrawable(d);
-//                    } else {
-//                        IndeterminateProgressDrawable d = new IndeterminateProgressDrawable(builder.getContext());
-//                        d.setTint(builder.widgetColor);
-//                        dialog.mProgress.setProgressDrawable(d);
-//                        dialog.mProgress.setIndeterminateDrawable(d);
-//                    }
-                } else {
-//                    HorizontalProgressDrawable d = new HorizontalProgressDrawable(builder.getContext());
-//                    d.setTint(builder.widgetColor);
-//                    dialog.mProgress.setProgressDrawable(d);
-//                    dialog.mProgress.setIndeterminateDrawable(d);
-                }
-            } else {
-                setTint(dialog.mProgress, Color.GREEN);
-            }
+            setTint(dialog.mProgress, builder.progressColor);
 
-            if (!builder.indeterminateProgress || builder.indeterminateIsHorizontalProgress) {
-                dialog.mProgress.setIndeterminate(builder.indeterminateIsHorizontalProgress);
+            if (!builder.indeterminateProgress) {
+                dialog.mProgress.setIndeterminate(false);
                 dialog.mProgress.setProgress(0);
                 dialog.mProgress.setMax(builder.progressMax);
                 dialog.mProgressLabel = findView(dialog, R.id.ed_progress_label);

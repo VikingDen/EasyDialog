@@ -57,7 +57,8 @@ public class SampleActivity extends AppCompatActivity {
                 "自定义view",//16
                 "普通进度条",//17
                 "横向进度条",//18
-                "横向进度条带进度提示"//19
+                "横向进度条带进度提示",//19
+                "进度颜色修改"//20
         );
         mlistView.setAdapter(new EDSimpleAdapter<String>(items, R.layout.item_sample) {
             @Override
@@ -235,6 +236,11 @@ public class SampleActivity extends AppCompatActivity {
                                 .progress(false, 20, true)
                                 .negativeText("取消")
                                 .positiveText("确认");
+                        break;
+                    case 20:
+                        builder.title("处理中")
+                                .progress(true, 0)
+                                .progressColorRes(R.color.font_danger);
                         break;
                 }
 
