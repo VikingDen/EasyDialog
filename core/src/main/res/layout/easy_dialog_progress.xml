@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qihuan.core.EasyRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/ed_stub_head" />
+
+    <RelativeLayout
+        android:id="@+id/ed_progress_frame"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ProgressBar
+            android:id="@android:id/progress"
+            style="?android:progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="2dp" />
+
+        <TextView
+            android:id="@+id/ed_progress_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@android:id/progress"
+            android:layout_alignStart="@android:id/progress"
+            android:layout_below="@android:id/progress"
+            android:gravity="start"
+            android:minWidth="36dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="100%" />
+
+        <TextView
+            android:id="@+id/ed_progress_min_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@android:id/progress"
+            android:layout_alignRight="@android:id/progress"
+            android:layout_below="@android:id/progress"
+            android:gravity="end"
+            android:minWidth="48dp"
+            android:textSize="16sp"
+            tools:text="9/16" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/ed_stub_bottom" />
+</com.qihuan.core.EasyRootLayout>

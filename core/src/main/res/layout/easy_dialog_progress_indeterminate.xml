@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qihuan.core.EasyRootLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/ed_stub_head" />
+
+    <RelativeLayout
+        android:id="@+id/ed_progress_frame"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ProgressBar
+            android:id="@android:id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/ed_stub_bottom" />
+</com.qihuan.core.EasyRootLayout>

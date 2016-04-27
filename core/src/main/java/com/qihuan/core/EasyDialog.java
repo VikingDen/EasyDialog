@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -21,10 +23,12 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.qihuan.adapter.EDSimpleAdapter;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,6 +43,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
     protected TextView title;
     protected FrameLayout customViewFrame;
     protected TextView content;
+    protected ProgressBar mProgress;
+    protected TextView mProgressLabel;
+    protected TextView mProgressMinMax;
 
     protected EasyButton positiveButton;
     protected EasyButton neutralButton;
@@ -92,6 +99,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
     }
 
+    public final boolean isCancelled() {
+        return !isShowing();
+    }
 
     public final EasyButton getButton(@NonNull EasyButton.EasyButtonType which) {
         switch (which) {
@@ -135,6 +145,42 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         });
     }
 
+    public final int getCurrentProgress() {
+        if (mProgress == null) return -1;
+        return mProgress.getProgress();
+    }
+
+    public ProgressBar getProgressBar() {
+        return mProgress;
+    }
+
+    public final void incrementProgress(final int by) {
+        setProgress(getCurrentProgress() + by);
+    }
+
+    public final int getMaxProgress() {
+        if (mProgress == null) return -1;
+        return mProgress.getMax();
+    }
+
+    public final void setProgress(final int progress) {
+        if (mBuilder.progress <= -2)
+            throw new IllegalStateException("Cannot use setProgress() on this dialog.");
+        mProgress.setProgress(progress);
+        mProgress.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressLabel != null) {
+                    mProgressLabel.setText(mBuilder.progressPercentFormat.format(
+                            (float) getCurrentProgress() / (float) getMaxProgress()));
+                }
+                if (mProgressMinMax != null) {
+                    mProgressMinMax.setText(String.format(mBuilder.progressNumberFormat,
+                            getCurrentProgress(), getMaxProgress()));
+                }
+            }
+        });
+    }
 
     /**
      * An alternate way to define a single callback.
@@ -151,7 +197,6 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
     public interface ListCallback<T> {
         void onItemClick(@NonNull EasyDialog dialog, @NonNull View view, @NonNull int position, @NonNull T item);
     }
-
 
     /**
      * 构建类
@@ -187,6 +232,15 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         protected int itemsHeight = EasyUtil.dp2px(46);
         //自定义adapter方式
         protected ListAdapter adapter;
+        //progress
+        protected boolean indeterminateProgress;
+        protected boolean showMinMax;
+        protected int progress = -2;
+        protected int progressMax = 0;
+        protected String progressNumberFormat;
+        protected NumberFormat progressPercentFormat;
+        /*横向的模糊进度（默认是圆环的模糊进度）*/
+        protected boolean indeterminateIsHorizontalProgress;
         //按钮相关
         protected CharSequence positiveText;
         protected CharSequence neutralText;
@@ -233,6 +287,9 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
 
             //normal mode (字体大小 标题、按钮 17sp 内容16sp , 标题、按钮高度50dp)
             //small mode (梯子大小 标题、按钮 16sp 内容 14sp, 标题，按钮高度40dp，标题不加粗)
+
+            progressPercentFormat = NumberFormat.getPercentInstance();
+            progressNumberFormat = "%1d/%2d";
         }
 
         /*     标题相关    */
@@ -408,6 +465,66 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
             return this;
         }
 
+        /* 进度相关 */
+
+        /**
+         * Makes this dialog a progress dialog.
+         *
+         * @param indeterminate true 显示圆形进度，false，显示百分比进度
+         * @param max           When indeterminate is false, the max value the horizontal progress bar can get to.
+         */
+        public Builder progress(boolean indeterminate, int max) {
+            if (this.customView != null)
+                throw new IllegalStateException("You cannot set progress() when you're using a custom view.");
+            if (indeterminate) {
+                this.indeterminateProgress = true;
+                this.progress = -2;
+            } else {
+                this.indeterminateProgress = false;
+                this.progress = -1;
+                this.progressMax = max;
+            }
+            return this;
+        }
+
+        /**
+         * Makes this dialog a progress dialog.
+         *
+         * @param indeterminate true 显示圆形进度，false，显示百分比进度
+         * @param max           When indeterminate is false, the max value the horizontal progress bar can get to.
+         * @param showMinMax    For determinate dialogs, the min and max will be displayed to the left (start) of the progress bar, e.g. 50/100.
+         */
+        public Builder progress(boolean indeterminate, int max, boolean showMinMax) {
+            this.showMinMax = showMinMax;
+            return progress(indeterminate, max);
+        }
+
+        /**
+         * hange the format of the small text showing current and maximum units of progress.
+         * The default is "%1d/%2d".
+         */
+        public Builder progressNumberFormat(@NonNull String format) {
+            this.progressNumberFormat = format;
+            return this;
+        }
+
+        /**
+         * Change the format of the small text showing the percentage of progress.
+         * The default is NumberFormat.getPercentageInstance().
+         */
+        public Builder progressPercentFormat(@NonNull NumberFormat format) {
+            this.progressPercentFormat = format;
+            return this;
+        }
+
+        /**
+         * By default, indeterminate progress dialogs will use a circular indicator. You
+         * can change it to use a horizontal progress indicator.
+         */
+        public Builder progressIndeterminateStyle(boolean horizontal) {
+            this.indeterminateIsHorizontalProgress = horizontal;
+            return this;
+        }
 
         /* 按钮相关 */
         public Builder buttonTextSize(float buttonTextSize) {
@@ -567,11 +684,15 @@ public class EasyDialog extends DialogBase implements View.OnClickListener {
         @UiThread
         public EasyDialog show() {
             EasyDialog dialog = build();
-            dialog.show();
+            try {
+                dialog.show();
+            } catch (Throwable e) {
+            }
             return dialog;
         }
 
 
     }
+
 
 }

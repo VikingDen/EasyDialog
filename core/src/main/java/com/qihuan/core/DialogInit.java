@@ -1,12 +1,19 @@
 package com.qihuan.core;
 
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -124,6 +131,65 @@ public class DialogInit {
 
         }
 
+        //set up progress
+        if (builder.indeterminateProgress || builder.progress > -2) {
+            //progress
+            dialog.mProgress = findView(dialog, android.R.id.progress);
+            if (null == dialog.mProgress) {
+                return;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                if (builder.indeterminateProgress) {
+//                    if (builder.indeterminateIsHorizontalProgress) {
+//                        IndeterminateHorizontalProgressDrawable d = new IndeterminateHorizontalProgressDrawable(builder.getContext());
+//                        d.setTint(builder.widgetColor);
+//                        dialog.mProgress.setProgressDrawable(d);
+//                        dialog.mProgress.setIndeterminateDrawable(d);
+//                    } else {
+//                        IndeterminateProgressDrawable d = new IndeterminateProgressDrawable(builder.getContext());
+//                        d.setTint(builder.widgetColor);
+//                        dialog.mProgress.setProgressDrawable(d);
+//                        dialog.mProgress.setIndeterminateDrawable(d);
+//                    }
+                } else {
+//                    HorizontalProgressDrawable d = new HorizontalProgressDrawable(builder.getContext());
+//                    d.setTint(builder.widgetColor);
+//                    dialog.mProgress.setProgressDrawable(d);
+//                    dialog.mProgress.setIndeterminateDrawable(d);
+                }
+            } else {
+                setTint(dialog.mProgress, Color.GREEN);
+            }
+
+            if (!builder.indeterminateProgress || builder.indeterminateIsHorizontalProgress) {
+                dialog.mProgress.setIndeterminate(builder.indeterminateIsHorizontalProgress);
+                dialog.mProgress.setProgress(0);
+                dialog.mProgress.setMax(builder.progressMax);
+                dialog.mProgressLabel = findView(dialog, R.id.ed_progress_label);
+                if (dialog.mProgressLabel != null) {
+                    dialog.mProgressLabel.setTextColor(builder.contentColor);
+                    dialog.mProgressLabel.setText(builder.progressPercentFormat.format(0));
+                }
+                dialog.mProgressMinMax = findView(dialog, R.id.ed_progress_min_max);
+                if (dialog.mProgressMinMax != null) {
+                    dialog.mProgressMinMax.setTextColor(builder.contentColor);
+
+                    if (builder.showMinMax) {
+                        dialog.mProgressMinMax.setVisibility(View.VISIBLE);
+                        dialog.mProgressMinMax.setText(String.format(builder.progressNumberFormat,
+                                0, builder.progressMax));
+                    } else {
+                        dialog.mProgressMinMax.setVisibility(View.GONE);
+                    }
+                } else {
+                    builder.showMinMax = false;
+                }
+            }
+
+        }
+
+
         //set up button
         dialog.positiveButton.setVisibility(!TextUtils.isEmpty(builder.positiveText) ? View.VISIBLE : View.GONE);
         dialog.positiveButton.setText(builder.positiveText);
@@ -150,7 +216,7 @@ public class DialogInit {
         if (TextUtils.isEmpty(builder.positiveText) && TextUtils.isEmpty(builder.negativeText) && TextUtils.isEmpty(builder.neutralText)) {
             findView(dialog, R.id.ed_btn_layout).setVisibility(View.GONE);
             bottomSp.setVisibility(View.GONE);
-        }else {
+        } else {
             bottomSp.setBackgroundColor(builder.bottomSpColor);
             bottomSp.getLayoutParams().height = builder.bottomSpHeight;
         }
@@ -169,6 +235,29 @@ public class DialogInit {
         dialog.setOnShowListenerInternal();
     }
 
+    public static void setTint(@NonNull ProgressBar progressBar, @ColorInt int color) {
+        setTint(progressBar, color, false);
+    }
+
+    public static void setTint(@NonNull ProgressBar progressBar, @ColorInt int color, boolean skipIndeterminate) {
+        ColorStateList sl = ColorStateList.valueOf(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setProgressTintList(sl);
+            progressBar.setSecondaryProgressTintList(sl);
+            if (!skipIndeterminate)
+                progressBar.setIndeterminateTintList(sl);
+        } else {
+            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                mode = PorterDuff.Mode.MULTIPLY;
+            }
+            if (!skipIndeterminate && progressBar.getIndeterminateDrawable() != null)
+                progressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+            if (progressBar.getProgressDrawable() != null)
+                progressBar.getProgressDrawable().setColorFilter(color, mode);
+        }
+    }
+
     private static <T extends View> T findView(EasyDialog dialog, @IdRes int id) {
         return (T) dialog.rootView.findViewById(id);
     }
@@ -180,6 +269,10 @@ public class DialogInit {
         } else if (builder.items != null && builder.items.size() > 0 || builder.adapter != null) {
             //列表View
             return R.layout.easy_dialog_list;
+        } else if (builder.progress > -2) {
+            return R.layout.easy_dialog_progress;
+        } else if (builder.indeterminateProgress) {
+            return R.layout.easy_dialog_progress_indeterminate;
         }
         //默认view
         return R.layout.easy_dialog_basic;

@@ -1,5 +1,6 @@
 package com.qihuan.easydialog;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.qihuan.core.EasyUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -52,7 +54,10 @@ public class SampleActivity extends AppCompatActivity {
                 "列表",//13
                 "自定义列表adapter",//14
                 "列表样式调整",//15
-                "自定义view"//16
+                "自定义view",//16
+                "普通进度条",//17
+                "横向进度条",//18
+                "横向进度条带进度提示"//19
         );
         mlistView.setAdapter(new EDSimpleAdapter<String>(items, R.layout.item_sample) {
             @Override
@@ -213,9 +218,45 @@ public class SampleActivity extends AppCompatActivity {
                                 .customView(R.layout.custom_view, true)
                                 .positiveText("确认");
                         break;
+                    case 17:
+                        builder.title("处理中")
+                                .progress(true, 0)
+                                .negativeText("取消")
+                                .positiveText("确认");
+                        break;
+                    case 18:
+                        builder.title("处理中")
+                                .progress(false, 20)
+                                .negativeText("取消")
+                                .positiveText("确认");
+                        break;
+                    case 19:
+                        builder.title("处理中")
+                                .progress(false, 20, true)
+                                .negativeText("取消")
+                                .positiveText("确认");
+                        break;
                 }
 
-                builder.show();
+                final EasyDialog easyDialog = builder.show();
+
+
+                if (position == 18 || position == 19) {
+                    //补齐进度
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (easyDialog.getCurrentProgress() < easyDialog.getMaxProgress()) {
+                                easyDialog.incrementProgress(1);
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+                }
             }
         });
 
