@@ -4,9 +4,7 @@ Base on [MaterialDialog](https://github.com/afollestad/material-dialogs), make i
 
 (基于MaterialDialog简化，修改了dialog的UI，使之更漂亮些。)
 
-/*![](imgs/dialog_normal.png)*/
-haha
-<img src="imgs/dialog_normal.png" style="width: 300px;max-width:300px;" />
+![](imgs/dialog_normal.png)
 
 ### Current Support (目前实现的有) 
 
