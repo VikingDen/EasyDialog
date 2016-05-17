@@ -6,6 +6,12 @@
         <item name="android:windowBackground">@drawable/dialog_bg_light</item>
     </style>
 
+    <!--当不方便引用appCompat-v7的包的时候，可以使用这个主题来代替-->
+    <!--<style name="ED_Light" parent="android:style/Theme.Holo.Light.Dialog">-->
+    <!--<item name="android:windowNoTitle">true</item>-->
+    <!--<item name="android:windowBackground">@drawable/dialog_bg_light</item>-->
+    <!--</style>-->
+
     <!--unsupport yet-->
     <style name="ED_Drak" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:backgroundDimEnabled">true</item>
